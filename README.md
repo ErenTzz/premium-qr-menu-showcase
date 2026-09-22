@@ -291,15 +291,15 @@ Designed with awareness of Turkish digital restaurant menu guidelines (Tarım ve
 
 ```
 premium-qr-menu-showcase/
-├── README.md                           # Project case study & technical overview
-├── README.tr.md                        # Turkish documentation
+├── README.md
+├── README.tr.md
 └── docs/
     ├── architecture/
-    │   └── system_architecture.md      # Deep-dive architecture & data flow documentation
+    │   └── system_architecture.md
     ├── demo/
-    │   ├── customer-flow.gif           # Optimized mobile customer flow animation (~5 MB)
-    │   └── admin-showcase.gif          # Optimized admin dashboard flow animation (~3 MB)
-    └── screenshots/                    # High-resolution desktop and mobile UI captures
+    │   ├── customer-flow.gif
+    │   └── admin-showcase.gif
+    └── screenshots/
 ```
 
 ---
@@ -310,7 +310,7 @@ premium-qr-menu-showcase/
 Open to Software Engineering, Full-Stack, and Frontend Development opportunities in Türkiye and remote international teams.
 
 - **GitHub**: [@ErenTzz](https://github.com/ErenTzz)
-- **LinkedIn**: [linkedin.com/in/erentoksoz](https://www.linkedin.com/in/erentoksoz)
+- **LinkedIn**: [Eren Toksöz](https://www.linkedin.com/in/eren-toksoz-094331186/)
 - **Live Demo**: [qr-menu-delta-weld.vercel.app](https://qr-menu-delta-weld.vercel.app)
 
 *Commercial inquiries regarding custom hospitality implementations or platform licensing are welcome via LinkedIn or email.*

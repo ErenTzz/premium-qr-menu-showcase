@@ -291,15 +291,15 @@ Türkiye'nin dijital restoran menü yönergeleri (Tarım ve Orman Bakanlığı) 
 
 ```
 premium-qr-menu-showcase/
-├── README.md                           # Proje vaka çalışması & teknik genel bakış
-├── README.tr.md                        # Türkçe dokümantasyon
+├── README.md
+├── README.tr.md
 └── docs/
     ├── architecture/
-    │   └── system_architecture.md      # Derinlemesine mimari & veri akışı dokümantasyonu
+    │   └── system_architecture.md
     ├── demo/
-    │   ├── customer-flow.gif           # Optimize edilmiş mobil müşteri akışı animasyonu (~5 MB)
-    │   └── admin-showcase.gif          # Optimize edilmiş admin paneli akışı animasyonu (~3 MB)
-    └── screenshots/                    # Yüksek çözünürlüklü masaüstü ve mobil UI görüntüleri
+    │   ├── customer-flow.gif
+    │   └── admin-showcase.gif
+    └── screenshots/
 ```
 
 ---
@@ -310,7 +310,7 @@ premium-qr-menu-showcase/
 Türkiye'de ve uzak (remote) uluslararası ekiplerde Yazılım Mühendisliği, Full-Stack ve Frontend Geliştirme fırsatlarına açıktır.
 
 - **GitHub**: [@ErenTzz](https://github.com/ErenTzz)
-- **LinkedIn**: [linkedin.com/in/erentoksoz](https://www.linkedin.com/in/erentoksoz)
+- **LinkedIn**: [Eren Toksöz](https://www.linkedin.com/in/eren-toksoz-094331186/)
 - **Canlı Demo**: [qr-menu-delta-weld.vercel.app](https://qr-menu-delta-weld.vercel.app)
 
 *Özel konaklama/restoran uygulamaları veya platform lisanslaması ile ilgili ticari sorularınız için LinkedIn veya e-posta yoluyla iletişime geçebilirsiniz.*
