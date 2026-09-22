@@ -1,5 +1,7 @@
 <div align="center">
 
+[🇹🇷 Türkçe](README.tr.md) | [🇬🇧 English](README.md)
+
 # 🍽️ Premium QR Menu SaaS
 ### Full-Stack QR Menu & Restaurant Management Platform
 
@@ -289,6 +291,7 @@ Designed with awareness of Turkish digital restaurant menu guidelines (Tarım ve
 ```
 premium-qr-menu-showcase/
 ├── README.md                           # Project case study & technical overview
+├── README.tr.md                        # Turkish documentation
 └── docs/
     ├── architecture/
     │   └── system_architecture.md      # Deep-dive architecture & data flow documentation
