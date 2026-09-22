@@ -1,6 +1,7 @@
 <div align="center">
 
-[🇹🇷 Türkçe](README.tr.md) | [🇬🇧 English](README.md)
+[![Türkçe](https://img.shields.io/badge/Dil-T%C3%BCrk%C3%A7e-E30A17?style=for-the-badge)](README.tr.md)
+[![English](https://img.shields.io/badge/Language-English-00247D?style=for-the-badge)](README.md)
 
 # 🍽️ Premium QR Menu SaaS
 ### Full-Stack QR Menu & Restaurant Management Platform
