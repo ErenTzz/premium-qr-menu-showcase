@@ -116,10 +116,10 @@ Requiring customer accounts for menu ratings creates heavy friction that discour
 - When a guest submits a Like or Dislike rating, a non-invasive SHA-256 composite hash (`voterHash`) is computed:
   $$\text{voterHash} = \text{SHA256}(\text{IP} + \text{UserAgent} + \text{ProductID})$$
 - The server checks for existing ratings from that fingerprint within a 6-hour window.
-- Repeat votes are silently acknowledged without writing duplicate records, preventing vote manipulation while maintaining a frictionless user experience.
+- Repeat votes are silently acknowledged without writing duplicate records, reducing duplicate voting and casual abuse while maintaining a frictionless user experience.
 
 ### D. Food Information & Transparency Features
-The product schema and UI accommodate Turkish restaurant menu transparency regulations (Tarım ve Orman Bakanlığı guidelines):
+The product schema and UI supports food-information and transparency fields relevant to restaurant menus:
 - **Per-Item Calorie Information (`calories`)**: Caloric value (kcal) per serving.
 - **Allergen Disclosures (`allergens`)**: Structured tags for common dietary allergens (Gluten, Dairy, Nuts, etc.).
 - **Meat Origin Sourcing (`meatOrigin`)**: Sourcing transparency (Beef, Chicken, Lamb, or Non-Meat).
@@ -128,7 +128,7 @@ The product schema and UI accommodate Turkish restaurant menu transparency regul
 ### E. Session-Based Administrative Security
 - Administrative mutations enforce server-side validation via `requireAuth()`.
 - Authentication state is encapsulated in a signed HS256 JWT managed by `jose`, stored in an HTTP-only, SameSite, secure cookie.
-- Decouples credentials from client-side JavaScript, preventing token leakage through XSS vectors.
+- Decouples credentials from client-side JavaScript, reducing exposure of session tokens to client-side JavaScript.
 
 ### F. Database Connection Management
 - Utilizing **Neon Serverless PostgreSQL** with built-in connection pooling.

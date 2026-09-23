@@ -34,7 +34,7 @@ Dijital restoran menüleri, ürün yönetimi, müşteri geri bildirimleri, dinam
 
 ## 📱 Canlı Görsel Sunum
 
-Platformun her iki tarafını da deneyimleyin: müşterinin mobil sipariş akışı ve mekan yöneticisinin idari paneli.
+Platformun her iki tarafını da deneyimleyin: müşterinin mobil menü tarama ve sepet akışı ile mekan yöneticisinin idari paneli.
 
 <div align="center">
   <table>
@@ -73,7 +73,7 @@ Bu proje, tamamen **Eren Toksöz** tarafından bağımsız bir full-stack geliş
 - **Sunucu Mimarisi**: Next.js App Router mimarisi kurularak, veri çekme işlemleri için React Server Components, mutasyonlar ve geri bildirim toplamak için Server Actions kullanıldı.
 - **Veri Modelleme & Depolama**: Prisma ORM kullanılarak ilişkisel PostgreSQL şeması tasarlandı; ilişkisel silme (cascade), kategori sıralama indeksleme ve Neon Serverless üzerinde bağlantı havuzlama (connection pooling) uygulandı.
 - **Kimlik Doğrulama & Güvenlik**: HTTP-only çerezlerde `jose` aracılığıyla saklanan imzalı HS256 JWT token'ları kullanılarak oturum tabanlı rota ve mutasyon korumaları oluşturuldu.
-- **Operasyonlar & Doğrulama**: Vercel sürekli dağıtım (CI/CD) yapılandırıldı ve temel müşteri/yönetici yolculuklarını doğrulamak için Playwright ile otomatik headless (görünmez tarayıcı) doğrulama betikleri yazıldı.
+- **Operasyonlar & Doğrulama**: Vercel üzerinden sürekli dağıtım (continuous deployment) yapılandırıldı ve temel müşteri/yönetici yolculuklarını doğrulamak için Playwright ile otomatik headless (görünmez tarayıcı) doğrulama betikleri yazıldı.
 
 ---
 
@@ -83,10 +83,10 @@ Bu proje, tamamen **Eren Toksöz** tarafından bağımsız bir full-stack geliş
 Müşteri menüsü sayfaları, kategori ve ürünleri doğrudan sunucuda çekmek için **React Server Components (RSC)** kullanır. Bu sayede istemci tarafında veri çekme şelaleleri (waterfalls) önlenir ve mobil cihazlara gönderilen JavaScript boyutu azaltılır. Etkileşimli özellikler (sepet çekmecesi `CartContext`, kategori seçici sekmeler ve tema geçişi vb.) render ağacının uçlarındaki hafif İstemci Bileşenleri (Client Components) ile sınırlandırılmıştır.
 
 ### 2. Zorunlu Giriş Gerektirmeyen Spam Korumalı Geri Bildirim
-Müşterileri hesap açmaya zorlamadan geri bildirim almak için, `submitFeedback` Server Action; istemcinin IP'si, User-Agent bilgisi ve hedeflenen ürün ID'sinden oluşan karma (composite) bir SHA-256 parmak izi hesaplar. 6 saatlik hız sınırlama (rate-limiting) penceresi, mükerrer oy kullanımını engellerken, sorunsuz bir misafir deneyimi sağlamak için idempotent (etkisi değişmeyen) bir yanıt döner.
+Müşterileri hesap açmaya zorlamadan geri bildirim almak için, `submitFeedback` Server Action; istemcinin IP'si, User-Agent bilgisi ve hedeflenen ürün ID'sinden oluşan karma (composite) bir SHA-256 parmak izi hesaplar. 6 saatlik hız sınırlama (rate-limiting) penceresi, mükerrer oy kullanımını engellerken, sorunsuz bir misafir deneyimi sağlamak için idempotent bir yanıt döner.
 
 ### 3. İlişkisel Modelleme & Manuel Kategori Sıralaması
-Restoran menüleri, basit alfabetik veya zaman damgalı sıralamadan ziyade özel bir görüntüleme sırası gerektirir. Veritabanı modeli, `Category` üzerinde açık bir `order` tam sayı sütunu barındırır. Özel bir Server Action, kategori pozisyonlarını atomik olarak güncelleyerek restoran yöneticilerinin servis sırasında mevsimsel veya yüksek kârlı menüleri yeniden önceliklendirmesine olanak tanır.
+Restoran menüleri, basit alfabetik veya zaman damgalı sıralamadan ziyade özel bir görüntüleme sırası gerektirir. Veritabanı modeli, `Category` üzerinde açık bir `order` tam sayı sütunu barındırır. Özel bir Server Action, kategori pozisyonlarını güvenli bir şekilde güncelleyerek restoran yöneticilerinin servis sırasında mevsimsel veya yüksek kârlı menüleri yeniden önceliklendirmesine olanak tanır.
 
 ### 4. İstemci Tarafı Sepet ve Sunucu Tarafı Mutasyonlar
 Alışveriş sepeti, ağ gecikmesi olmaksızın anında miktar ayarlamaları ve toplam fiyat hesaplamaları sağlamak için tamamen React Context (`CartContext`) üzerinden istemci tarafı belleğinde çalışır. Sunucu tarafı iletişim, yalnızca veritabanı kalıcılığı gerektiren durum mutasyonlarına (ürün geri bildirimi ve admin CRUD işlemleri gibi) ayrılmıştır.
@@ -95,7 +95,7 @@ Alışveriş sepeti, ağ gecikmesi olmaksızın anında miktar ayarlamaları ve 
 
 ## 🏛️ Sistem Mimarisi
 
-İstemci sunumu, sunucu tarafı orkestrasyon ve sunucusuz ilişkisel kalıcılığı ayıran modüler bir full-stack mimari. Detaylı belgelendirme [docs/architecture/system_architecture.md](docs/architecture/system_architecture.md) adresinde mevcuttur.
+İstemci sunumu, sunucu tarafı orkestrasyon ve serverless ilişkisel veri katmanını ayıran modüler bir full-stack mimari. Detaylı belgelendirme [docs/architecture/system_architecture.md](docs/architecture/system_architecture.md) adresinde mevcuttur.
 
 ```mermaid
 graph TD
@@ -130,57 +130,7 @@ graph TD
 
 ## 🗄️ İlişkisel Veritabanı Şeması
 
-Veritabanı modeli; restoran kiracılığı (tenancy), sıralı kategoriler, ürün meta verileri ve müşteri geri bildirimleri etrafında normalize edilmiştir:
-
-```mermaid
-erDiagram
-    Restaurant ||--o{ Category : "sahiptir"
-    Restaurant ||--o{ Product : "sahiptir"
-    Category ||--o{ Product : "içerir"
-    Product ||--o{ Feedback : "alır"
-
-    Restaurant {
-        string id PK
-        string name
-        string slug UK
-        datetime createdAt
-    }
-
-    Category {
-        string id PK
-        string name
-        int order
-        string restaurantId FK
-    }
-
-    Product {
-        string id PK
-        string name
-        string description
-        decimal price
-        string image
-        boolean isAvailable
-        boolean isFeatured
-        int featuredOrder
-        int calories
-        string allergens
-        string meatOrigin
-        boolean hasAlcohol
-        boolean hasPork
-        string categoryId FK
-        string restaurantId FK
-        datetime createdAt
-    }
-
-    Feedback {
-        string id PK
-        string productId FK
-        string type
-        string comment
-        string voterHash
-        datetime createdAt
-    }
-```
+Tam ilişkisel model (ER şeması) ve mimari ödünleşimler (trade-offs) için [Sistem Mimarisi (System Architecture)](docs/architecture/system_architecture.md) belgesini inceleyebilirsiniz.
 
 ---
 
@@ -194,7 +144,7 @@ erDiagram
 - **Sorunsuz Geri Bildirim**: Cihaz parmak izi ile hız sınırlandırması yapılmış, isteğe bağlı yorum içeren Beğen/Beğenme derecelendirmeleri.
 
 ### 🥗 Gıda Bilgisi & Şeffaflık Özellikleri
-Türkiye'nin dijital restoran menü yönergeleri (Tarım ve Orman Bakanlığı) dikkate alınarak tasarlanmıştır:
+Uygulama, restoran menüleri ile ilgili gıda bilgisi ve şeffaflık alanlarını desteklemektedir:
 - **Ürün Başına Kalori Bilgisi**: Her ürün için yapılandırılan ve detay modallarında gösterilen kalori (kcal) değerleri.
 - **Alerjen Göstergeleri**: Yaygın diyet alerjenleri (Gluten, Süt Ürünleri, Kuruyemiş vb.) için yapılandırılmış rozetler.
 - **Et Menşei Kaynağı**: Şeffaf kaynak alanı (Dana, Tavuk, Kuzu veya Etsiz).
@@ -277,7 +227,7 @@ Türkiye'nin dijital restoran menü yönergeleri (Tarım ve Orman Bakanlığı) 
 
 ---
 
-## 📊 CI/CD, Dağıtım & Test Süreci
+## 📊 Dağıtım (Deployment) & Test Süreci
 
 - **Mevcut Durum**: `Tamamlandı / Portfolyo İçin Hazır / Bağımsız Olarak Geliştirildi`
 - **Dağıtım (Deployment) Mimarisi**:
@@ -291,7 +241,9 @@ Türkiye'nin dijital restoran menü yönergeleri (Tarım ve Orman Bakanlığı) 
 
 ---
 
-## 📁 Depo Yapısı
+## 📁 Private Production Depo Yapısı
+
+Aşağıdaki yapı, asıl (private) üretim deposunun mimarisini temsil etmektedir. Kaynak kod dosyaları bu açık vitrin (showcase) deposuna bilinçli olarak dahil edilmemiştir.
 
 ```
 premium-qr-menu-showcase/
@@ -321,7 +273,7 @@ premium-qr-menu-showcase/
 ## 👨‍💻 Geliştirici Hakkında
 
 **Eren Toksöz** — Yazılım Mühendisi  
-Türkiye'de ve uzak (remote) uluslararası ekiplerde Yazılım Mühendisliği, Full-Stack ve Frontend Geliştirme fırsatlarına açıktır.
+Türkiye'de ve uzaktan çalışan uluslararası ekiplerde Yazılım Mühendisliği, Full-Stack ve Frontend Geliştirme fırsatlarına açıktır.
 
 - **GitHub**: [@ErenTzz](https://github.com/ErenTzz)
 - **LinkedIn**: [Eren Toksöz](https://www.linkedin.com/in/eren-toksoz-094331186/)

@@ -34,7 +34,7 @@ A full-stack SaaS application for digital restaurant menus, product management, 
 
 ## 📱 Live Visual Showcase
 
-Experience both sides of the platform: the customer's mobile ordering flow and the venue manager's administrative dashboard.
+Experience both sides of the platform: the customer's mobile menu browsing and cart flow, and the venue manager's administrative dashboard.
 
 <div align="center">
   <table>
@@ -73,7 +73,7 @@ This project was designed, architected, and built entirely by **Eren Toksöz** a
 - **Server Architecture**: Implemented Next.js App Router architecture, leveraging React Server Components for data fetching and Server Actions for mutations and feedback collection.
 - **Data Modeling & Storage**: Designed the relational PostgreSQL schema using Prisma ORM, implementing relational cascades, category order indexing, and connection pooling on Neon Serverless.
 - **Authentication & Security**: Built session-based route and mutation guards using signed HS256 JWT tokens stored in HTTP-only cookies via `jose`.
-- **Operations & Validation**: Configured Vercel continuous deployment and authored automated Playwright headless verification scripts to validate core customer and admin journeys.
+- **Operations & Validation**: Configured continuous deployment through Vercel and authored automated Playwright headless verification scripts to validate core customer and admin journeys.
 
 ---
 
@@ -86,7 +86,7 @@ Customer menu pages use **React Server Components (RSC)** to fetch categories an
 To capture guest feedback without forcing customers to create an account, the `submitFeedback` Server Action computes a composite SHA-256 fingerprint from the client's IP, User-Agent, and the targeted product ID. A 6-hour rate-limiting window prevents duplicate ballot stuffing while returning an idempotent response to preserve a friction-free guest experience.
 
 ### 3. Relational Modeling & Manual Category Ordering
-Restaurant menus require custom display order rather than simple alphabetical or timestamp sorting. The database model maintains an explicit `order` integer column on `Category`. A dedicated Server Action updates category positions atomically, enabling restaurant managers to re-prioritize seasonal or high-margin menus during service.
+Restaurant menus require custom display order rather than simple alphabetical or timestamp sorting. The database model maintains an explicit `order` integer column on `Category`. A dedicated Server Action safely updates category positions, enabling restaurant managers to re-prioritize seasonal or high-margin menus during service.
 
 ### 4. Client-Side Cart vs. Server-Side Mutations
 The shopping cart operates entirely in client-side memory through React Context (`CartContext`), enabling instant quantity adjustments and total price recalculations without network latency. Server-side communication is reserved for state mutations requiring database persistence (such as product feedback and admin CRUD operations).
@@ -130,57 +130,7 @@ graph TD
 
 ## 🗄️ Relational Database Schema
 
-The database model is normalized around restaurant tenancy, ordered categories, product metadata, and customer feedback:
-
-```mermaid
-erDiagram
-    Restaurant ||--o{ Category : "has many"
-    Restaurant ||--o{ Product : "owns"
-    Category ||--o{ Product : "contains"
-    Product ||--o{ Feedback : "receives"
-
-    Restaurant {
-        string id PK
-        string name
-        string slug UK
-        datetime createdAt
-    }
-
-    Category {
-        string id PK
-        string name
-        int order
-        string restaurantId FK
-    }
-
-    Product {
-        string id PK
-        string name
-        string description
-        decimal price
-        string image
-        boolean isAvailable
-        boolean isFeatured
-        int featuredOrder
-        int calories
-        string allergens
-        string meatOrigin
-        boolean hasAlcohol
-        boolean hasPork
-        string categoryId FK
-        string restaurantId FK
-        datetime createdAt
-    }
-
-    Feedback {
-        string id PK
-        string productId FK
-        string type
-        string comment
-        string voterHash
-        datetime createdAt
-    }
-```
+For the full relational model (ER diagram) and architectural trade-offs, see [System Architecture](docs/architecture/system_architecture.md).
 
 ---
 
@@ -194,7 +144,7 @@ erDiagram
 - **Friction-Free Feedback**: Like/Dislike ratings with optional comments, rate-limited via device fingerprinting.
 
 ### 🥗 Food Information & Transparency Features
-Designed with awareness of Turkish digital restaurant menu guidelines (Tarım ve Orman Bakanlığı):
+The application supports food-information and transparency fields relevant to restaurant menus:
 - **Per-Item Calorie Information**: Caloric values (kcal) configured per item and displayed in detail modals.
 - **Allergen Indicators**: Structured badges for common dietary allergens (Gluten, Dairy, Nuts, etc.).
 - **Meat Origin Sourcing**: Transparent sourcing field (Beef, Chicken, Lamb, or Non-Meat).
@@ -277,7 +227,7 @@ Designed with awareness of Turkish digital restaurant menu guidelines (Tarım ve
 
 ---
 
-## 📊 CI/CD, Deployment & Testing
+## 📊 Deployment & Testing
 
 - **Current Status**: `Completed / Portfolio-Ready / Independently Developed`
 - **Deployment Architecture**:
@@ -291,7 +241,9 @@ Designed with awareness of Turkish digital restaurant menu guidelines (Tarım ve
 
 ---
 
-## 📁 Repository Structure
+## 📁 Private Production Repository Structure
+
+The structure below represents the private production repository. Source files are intentionally not included in this public showcase.
 
 ```
 premium-qr-menu-showcase/
