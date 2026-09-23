@@ -277,13 +277,17 @@ Türkiye'nin dijital restoran menü yönergeleri (Tarım ve Orman Bakanlığı) 
 
 ---
 
-## 📊 Proje Durumu & Test Süreci
+## 📊 CI/CD, Dağıtım & Test Süreci
 
 - **Mevcut Durum**: `Tamamlandı / Portfolyo İçin Hazır / Bağımsız Olarak Geliştirildi`
+- **Dağıtım (Deployment) Mimarisi**:
+  - **Vercel Serverless Platformu**: Uygulama Vercel üzerinde barındırılmaktadır. Statik dosyalar edge ağında dağıtılırken, Server Actions ve API rotaları sunucusuz (serverless) fonksiyonlar olarak çalışır.
+  - **Neon PostgreSQL**: Bağlantı havuzlama (connection pooling) etkinleştirilmiş yönetilen bir Neon Serverless veritabanına bağlıdır.
 - **Kalite & Doğrulama**:
-  - Kullanıcı yolculukları (user journeys), headless **Playwright** tarayıcı otomasyon betikleri ve çapraz cihaz mobil testleri ile doğrulandı.
-  - Uçtan uca akışlar karanlık ve aydınlık temalarda, dokunmatik ekranlarda ve çeşitli ağ gecikme (latency) koşullarında test edildi.
-  - *Mühendislik Yol Haritası*: Bir sonraki aşamada otomatik birim test süitlerinin (Jest/Vitest) ve CI pipeline kontrollerinin entegrasyonu planlanmaktadır.
+  - **Playwright E2E Testleri**: Temel kullanıcı yolculukları (müşteri sipariş akışı, admin kategori mutasyonları) headless Playwright tarayıcı otomasyon betikleri ile doğrulanmıştır.
+  - Gerçek mobil cihazlarda ve çeşitli ağ gecikme (latency) koşullarında çapraz cihaz testleri, dokunmatik etkileşimler ve tema (karanlık/aydınlık) dayanıklılığı test edilmiştir.
+- **Mühendislik Yol Haritası**:
+  - Üretim (production) dağıtımlarını kontrol altında tutmak için otomatik birim test süitlerinin (Jest/Vitest) bir GitHub Actions CI ardışık düzenine entegrasyonu.
 
 ---
 
@@ -291,15 +295,25 @@ Türkiye'nin dijital restoran menü yönergeleri (Tarım ve Orman Bakanlığı) 
 
 ```
 premium-qr-menu-showcase/
-├── README.md
-├── README.tr.md
-└── docs/
-    ├── architecture/
-    │   └── system_architecture.md
-    ├── demo/
-    │   ├── customer-flow.gif
-    │   └── admin-showcase.gif
-    └── screenshots/
+├── src/                                # Uygulama Kaynak Kodu (Source Code)
+│   ├── app/                            # Next.js App Router (RSC & İstemci Bileşenleri)
+│   │   ├── actions/                    # Next.js Server Actions (Veri Mutasyonları)
+│   │   ├── admin/                      # Korumalı Yönetim (Admin) Paneli Rotaları
+│   │   ├── api/                        # Next.js Route Handlers (API Uç Noktaları)
+│   │   └── globals.css                 # Global stiller & Tailwind yapılandırması
+│   ├── components/                     # Yeniden kullanılabilir React UI Bileşenleri
+│   ├── context/                        # React Context Sağlayıcıları (CartContext)
+│   └── lib/                            # Yardımcı fonksiyonlar, Prisma Client, Auth
+├── prisma/                             # Veritabanı ORM
+│   ├── migrations/                     # PostgreSQL migrasyon geçmişi
+│   └── schema.prisma                   # Veritabanı ilişkisel şeması
+├── package.json                        # Proje bağımlılıkları & betikleri
+├── README.md                           # Proje vaka çalışması & teknik genel bakış (EN)
+├── README.tr.md                        # Türkçe dokümantasyon
+└── docs/                               # Showcase Varlıkları & Dokümantasyon
+    ├── architecture/                   # Mimari şemalar ve akışlar
+    ├── demo/                           # Sunum için animasyonlu GIF'ler
+    └── screenshots/                    # Yüksek çözünürlüklü uygulama ekran görüntüleri
 ```
 
 ---

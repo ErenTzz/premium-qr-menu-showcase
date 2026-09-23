@@ -277,13 +277,17 @@ Designed with awareness of Turkish digital restaurant menu guidelines (Tarım ve
 
 ---
 
-## 📊 Project Status & Testing
+## 📊 CI/CD, Deployment & Testing
 
 - **Current Status**: `Completed / Portfolio-Ready / Independently Developed`
+- **Deployment Architecture**:
+  - **Vercel Serverless Platform**: The application is deployed on Vercel, utilizing edge network distribution for static assets and serverless functions for Server Actions and API routes.
+  - **Neon PostgreSQL**: Connected to a managed Neon Serverless Postgres instance with connection pooling enabled.
 - **Quality & Verification**:
-  - User journeys validated via headless **Playwright** browser automation scripts and cross-device mobile testing.
-  - End-to-end flows tested across dark and light themes, touch viewports, and varied network latency conditions.
-  - *Engineering Roadmap*: Integration of automated unit test suites (Jest/Vitest) and CI pipeline checks is planned as the next milestone.
+  - **Playwright E2E Testing**: Core user journeys (customer ordering flow, admin category mutations) are validated via headless Playwright browser automation scripts.
+  - Cross-device mobile testing, touch interactions, and theme (dark/light) resilience have been verified across real mobile devices and network latency conditions.
+- **Engineering Roadmap**:
+  - Integration of automated unit test suites (Jest/Vitest) into a GitHub Actions CI pipeline to gate production deployments.
 
 ---
 
@@ -291,15 +295,25 @@ Designed with awareness of Turkish digital restaurant menu guidelines (Tarım ve
 
 ```
 premium-qr-menu-showcase/
-├── README.md
-├── README.tr.md
-└── docs/
-    ├── architecture/
-    │   └── system_architecture.md
-    ├── demo/
-    │   ├── customer-flow.gif
-    │   └── admin-showcase.gif
-    └── screenshots/
+├── src/                                # Application Source Code
+│   ├── app/                            # Next.js App Router (RSC & Client Components)
+│   │   ├── actions/                    # Next.js Server Actions (Mutations)
+│   │   ├── admin/                      # Protected Admin Dashboard Routes
+│   │   ├── api/                        # Next.js Route Handlers (API)
+│   │   └── globals.css                 # Global styles & Tailwind entry
+│   ├── components/                     # Reusable React UI Components
+│   ├── context/                        # React Context Providers (CartContext)
+│   └── lib/                            # Utility functions, Prisma Client, Auth
+├── prisma/                             # Database ORM
+│   ├── migrations/                     # PostgreSQL migration history
+│   └── schema.prisma                   # Database relational schema
+├── package.json                        # Project dependencies & scripts
+├── README.md                           # Project case study & technical overview
+├── README.tr.md                        # Turkish documentation
+└── docs/                               # Showcase Assets & Documentation
+    ├── architecture/                   # Architecture diagrams and flows
+    ├── demo/                           # Animated GIFs for showcase
+    └── screenshots/                    # High-res application screenshots
 ```
 
 ---
